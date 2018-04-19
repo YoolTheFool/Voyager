@@ -218,7 +218,7 @@ function update(){
     var vol = mic.getLevel();
 
 
-    if (vol > 0.5) {
+    if (vol > 0.4) {
         if (!isVoyager){
         var loader2 = new THREE.JSONLoader();
 
@@ -241,7 +241,7 @@ function update(){
 
     }
   }
-  if (vol < 0.5){
+  if (vol < 0.4){
     isVoyager = false;
 
   }
