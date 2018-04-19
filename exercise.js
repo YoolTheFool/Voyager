@@ -11,10 +11,18 @@ var sceneObjects;
 let d_light;
 var loader2;
 let voyager;
-
+var mic;
+let temp_voy;
+let isVoyager = false;
 window.addEventListener('load', init); // first load and then init
 
 function init(){
+
+  //MIC
+  mic = new p5.AudioIn();
+
+  mic.start();
+
 
   container = document.querySelector('#sketch');
 
@@ -42,38 +50,49 @@ function init(){
   loader = new THREE.TextureLoader();
 
   mouse = new THREE.Vector2();
-  //raycaster = new THREE.Raycaster();
+
 
   createEnvironment();
 
-  window.addEventListener('resize', windowResize, true);
-  window.addEventListener('mousemove', onMouseMove, false);
+  //window.addEventListener('resize', windowResize, true);
+  //window.addEventListener('mousemove', onMouseMove, false);
+  //document.addEventListener('mousedown', onDocumentMouseDown, false)
+//RAYCASTER
 
-  $('#sketch').on('dragenter dragstart dragend dragleave dragover drag drop', function(e){
-  e.preventDefault();
-  mouse.x =  (e.clientX / window.innerWidth) *2 -1;
-  mouse.y = -(e.clientY / window.innerHeight)*2 +1;
-  raycasting();
-});
+//raycaster = new THREE.Raycaster();
+  // $('#sketch').on('dragenter dragstart dragend dragleave dragover drag drop', function(e){
+  // e.preventDefault();
+  // mouse.x =  (e.clientX / window.innerWidth) *2 -1;
+  // mouse.y = -(e.clientY / window.innerHeight)*2 +1;
+  // raycasting();
+//});
   update()
 }
 
-function windowResize(){
-  let wid = window.innerWidth;
-  let hei = window.innerHeight;
-  renderer.setSize(wid, hei);
-  camera.asspect = wid/hei;
-  camera.updateProjectionMatrix();
+// function onDocumentMouseDown(){
+//   var loader2 = new THREE.JSONLoader();
+//
+//   loader2.load('./imgs/voyager1.json', handle_load);
+//
+//   function handle_load(voyager_geo, voyager_mat){
+//     voyager_mat = new THREE.MeshNormalMaterial({
+//       emmisive: 0xFFD700,
+//     });
+//     voyager = new THREE.Mesh(voyager_geo,voyager_mat);
+//     scene.add(voyager);
+//     //voyager.position.z = -100;
+//     //voyager.position.x = -50;
+//
+//     voyager.scale = (0.1,0.1,0.1)
+//   }
+// }
 
+// function onMouseMove(e){
+//   //normalizing between -1, 1
+//   mouse.x = (e.clientX/window.innerWidth)*2 -1;
+//   mouse.y = (e.clientY/window.innerWidth)*2 +1;
 
-}
-
-function onMouseMove(e){
-  //normalizing between -1, 1
-  mouse.x = (e.clientX/window.innerWidth)*2 -1;
-  mouse.y = (e.clientY/window.innerWidth)*2 +1;
-
-}
+//}
 
 
 function moveLight(){
@@ -83,7 +102,7 @@ function moveLight(){
 
 }
 function moveSpheres(){
-  sphere1.rotation.z = Math.tan(time);
+  //sphere1.rotation.z = Math.tan(time);
   sphere1.rotation.x = -Math.sin(time);
   sphere1.rotation.y = Math.cos(time)*2;
 
@@ -91,16 +110,7 @@ function moveSpheres(){
   //sphere2.position.x = Math.sin(time)*150;
 
 }
-function moveVoyager(){
-  if(voyager != null){
-  //voyager.position.z = Math.tan(time);
-  voyager.rotation.x = Math.tan(time);;
-  voyager.position.z += Math.sin(time);
-  voyager.position.x += Math.cos(time);
 
-  //voyager.position.y = Math.cos(time)*2;
-}
-}
   //d_light.position.y = Math.cos(time*2);
 // function raycasting(){
 //   //set Raycaster
@@ -165,25 +175,24 @@ function createEnvironment(){
   //a_light.position.set(100,200,400)
 
 //VOYAGER
-
-var loader2 = new THREE.JSONLoader();
-
-loader2.load('./imgs/voyager1.json', handle_load);
-
-function handle_load(voyager_geo, voyager_mat){
-  voyager_mat = new THREE.MeshNormalMaterial({
-    emmisive: 0xFFD700,
-    emmisiveIntensity: 1
-  });
-  voyager = new THREE.Mesh(voyager_geo,voyager_mat);
-  scene.add(voyager);
-  voyager.position.z = -100;
-  //voyager.position.x = -50;
-
-  voyager.scale = (0.1,0.1,0.1)
-}
-
-
+// function addVoyager(){
+// var loader2 = new THREE.JSONLoader();
+//
+// loader2.load('./imgs/voyager1.json', handle_load);
+//
+// function handle_load(voyager_geo, voyager_mat){
+//   voyager_mat = new THREE.MeshNormalMaterial({
+//     //emmisive: 0xFFD700
+//     //emmisiveIntensity: 1
+//   });
+//   voyager = new THREE.Mesh(voyager_geo,voyager_mat);
+//   scene.add(voyager);
+//   voyager.position.z = -100;
+//   //voyager.position.x = -50;
+//
+//   voyager.scale = (0.1,0.1,0.1)
+// }
+// }
 
 
 
@@ -200,11 +209,42 @@ function handle_load(voyager_geo, voyager_mat){
 
 //ANIMATION
 function update(){
+    //mousePressed(addVoyager);
     moveSpheres();
     moveVoyager();
     time += 0.01;
     //raycasting();
     moveLight();
+    var vol = mic.getLevel();
+
+
+    if (vol > 0.5) {
+        if (!isVoyager){
+        var loader2 = new THREE.JSONLoader();
+
+        loader2.load('./imgs/voyager1.json', handle_load);
+
+        function handle_load(voyager_geo, voyager_mat){
+          voyager_mat = new THREE.MeshNormalMaterial({
+            emmisive: 0xFFD700,
+          });
+          voyager = new THREE.Mesh(voyager_geo,voyager_mat);
+          //temp_voy = voyager2;
+          sphere1.add(voyager);
+          voyager.position.set(random(100),random(100),random(100))
+
+          //voyager.position.x = -50;
+          isVoyager = true;
+          //voyager.scale = (0.1,0.1,0.1)
+
+        }
+
+    }
+  }
+  if (vol < 0.5){
+    isVoyager = false;
+
+  }
   controls.update();
   renderer.render(
     scene,
@@ -216,6 +256,16 @@ function update(){
 
 }
 
+function moveVoyager(){
+  if(voyager != null){
+  //voyager.position.z = Math.tan(time);
+  voyager.rotation.x = time;
+  voyager.position.z += Math.sin(time);
+  voyager.position.x += Math.cos(time);
+
+  //voyager.position.y = Math.cos(time)*2;
+}
+}
 // function moveVoyager(){
 //   if(voyager != null)
 //   voyager.position.x += 0.01;
