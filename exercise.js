@@ -11,9 +11,10 @@ var sceneObjects;
 let d_light;
 var loader2;
 let voyager;
-var mic;
+var mic, vol;
 let temp_voy;
 let isVoyager = false;
+var voyager2;
 window.addEventListener('load', init); // first load and then init
 
 function init(){
@@ -94,7 +95,13 @@ function init(){
 
 //}
 
+function moveCamera(){
+  camera.position.x += 1;
+  camera.position.y += 1;
+  camera.position.z += 1;
 
+
+}
 function moveLight(){
   d_light.position.z = Math.sin(time)/2;
   d_light.position.x = Math.cos(time);
@@ -175,25 +182,23 @@ function createEnvironment(){
   //a_light.position.set(100,200,400)
 
 //VOYAGER
-// function addVoyager(){
-// var loader2 = new THREE.JSONLoader();
-//
-// loader2.load('./imgs/voyager1.json', handle_load);
-//
-// function handle_load(voyager_geo, voyager_mat){
-//   voyager_mat = new THREE.MeshNormalMaterial({
-//     //emmisive: 0xFFD700
-//     //emmisiveIntensity: 1
-//   });
-//   voyager = new THREE.Mesh(voyager_geo,voyager_mat);
-//   scene.add(voyager);
-//   voyager.position.z = -100;
-//   //voyager.position.x = -50;
-//
-//   voyager.scale = (0.1,0.1,0.1)
-// }
-// }
+    var loader2 = new THREE.JSONLoader();
 
+    loader2.load('./imgs/voyager1.json', handle_load);
+
+    function handle_load(voyager_geo, voyager_mat){
+      voyager_mat = new THREE.MeshNormalMaterial({
+        //emmisive: 0xFFD700
+        //emmisiveIntensity: 1
+      });
+      voyager = new THREE.Mesh(voyager_geo,voyager_mat);
+      voyager.position.z = -100;
+      scene.add(voyager);
+      //voyager.position.x = -50;
+
+    //  voyager.setSize(30)
+      voyager2 = voyager;
+    }
 
 
 
@@ -209,37 +214,19 @@ function createEnvironment(){
 
 //ANIMATION
 function update(){
-    //mousePressed(addVoyager);
-    moveSpheres();
-    moveVoyager();
-    time += 0.01;
-    //raycasting();
-    moveLight();
-    var vol = mic.getLevel();
 
+time += 0.01;
+moveSpheres();
+// var vol = mic.getLevel();
+// if (vol > 0.1){
+  //  scene.add(voyager2);
+    //moveCamera();
 
-    
-        var loader2 = new THREE.JSONLoader();
+// }
 
-        loader2.load('./imgs/voyager1.json', handle_load);
+moveVoyager();
+moveLight();
 
-        function handle_load(voyager_geo, voyager_mat){
-          voyager_mat = new THREE.MeshNormalMaterial({
-            emmisive: 0xFFD700,
-          });
-          voyager = new THREE.Mesh(voyager_geo,voyager_mat);
-          //temp_voy = voyager2;
-          sphere1.add(voyager);
-          voyager.position.z = -100;
-
-          //voyager.position.x = -50;
-          //isVoyager = true;
-          //voyager.scale = (0.1,0.1,0.1)
-
-        }
-
-   
-  
   controls.update();
   renderer.render(
     scene,
@@ -251,16 +238,22 @@ function update(){
 
 }
 
+
+// VOYAGER FUNCTIONS
+
+
+
 function moveVoyager(){
-  if(voyager != null){
+  if(voyager2 != null){
   //voyager.position.z = Math.tan(time);
-  voyager.rotation.x = time;
+  voyager.rotation.x = (time);
   voyager.position.z += Math.sin(time);
   voyager.position.x += Math.cos(time);
 
   //voyager.position.y = Math.cos(time)*2;
 }
 }
+
 // function moveVoyager(){
 //   if(voyager != null)
 //   voyager.position.x += 0.01;
