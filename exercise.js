@@ -218,8 +218,7 @@ function update(){
     var vol = mic.getLevel();
 
 
-    if (vol > 0.4) {
-        if (!isVoyager){
+    
         var loader2 = new THREE.JSONLoader();
 
         loader2.load('./imgs/voyager1.json', handle_load);
@@ -231,20 +230,16 @@ function update(){
           voyager = new THREE.Mesh(voyager_geo,voyager_mat);
           //temp_voy = voyager2;
           sphere1.add(voyager);
-          voyager.position.set(random(100),random(100),random(100))
+          voyager.position.z = -100;
 
           //voyager.position.x = -50;
-          isVoyager = true;
+          //isVoyager = true;
           //voyager.scale = (0.1,0.1,0.1)
 
         }
 
-    }
-  }
-  if (vol < 0.4){
-    isVoyager = false;
-
-  }
+   
+  
   controls.update();
   renderer.render(
     scene,
