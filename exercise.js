@@ -110,7 +110,7 @@ function moveLight(){
 
 }
 function moveSpheres(){
-  //sphere1.rotation.z = Math.tan(time);
+  sphere1.rotation.z = Math.tan(time);
   sphere1.rotation.x = -Math.sin(time);
   sphere1.rotation.y = Math.cos(time)*2;
 
