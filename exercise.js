@@ -20,9 +20,9 @@ window.addEventListener('load', init); // first load and then init
 function init(){
 
   //MIC
-  mic = new p5.AudioIn();
+//   mic = new p5.AudioIn();
 
-  mic.start();
+//   mic.start();
 
 
   container = document.querySelector('#sketch');
