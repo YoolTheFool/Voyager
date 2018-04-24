@@ -15,14 +15,15 @@ var mic, vol;
 let temp_voy;
 let isVoyager = false;
 var voyager2;
+let voyagerArray = [];
 window.addEventListener('load', init); // first load and then init
 
 function init(){
 
   //MIC
-//   mic = new p5.AudioIn();
+  mic = new p5.AudioIn();
 
-//   mic.start();
+  mic.start();
 
 
   container = document.querySelector('#sketch');
@@ -187,17 +188,14 @@ function createEnvironment(){
     loader2.load('./imgs/voyager1.json', handle_load);
 
     function handle_load(voyager_geo, voyager_mat){
-      voyager_mat = new THREE.MeshNormalMaterial({
-        //emmisive: 0xFFD700
-        //emmisiveIntensity: 1
-      });
+      voyager_mat = new THREE.MeshNormalMaterial();
       voyager = new THREE.Mesh(voyager_geo,voyager_mat);
-      voyager.position.z = -100;
-      scene.add(voyager);
+      //voyager.position.z= -100 ;
+      //scene.add(voyager);
       //voyager.position.x = -50;
 
     //  voyager.setSize(30)
-      voyager2 = voyager;
+      //voyager2 = voyager;
     }
 
 
@@ -215,23 +213,32 @@ function createEnvironment(){
 //ANIMATION
 function update(){
 
-time += 0.01;
-moveSpheres();
-// var vol = mic.getLevel();
-// if (vol > 0.1){
-  //  scene.add(voyager2);
-    //moveCamera();
+  time += 0.01;
+  moveSpheres();
+  var vol = mic.getLevel();
+  // console.log(vol);
+  if (vol > 0.45){
+    // voyager.position.z = voyager.position.z + 20;
+    let newVoyager = voyager.clone();
+    voyagerArray.push(newVoyager);
 
-// }
 
-moveVoyager();
-moveLight();
+
+    sphere1.add(voyagerArray[voyagerArray.length-1]);
+    voyagerArray[voyagerArray.length-1].position.z = -100;
+  //  moveCamera();
+
+  }
+voyagerArray.forEach((voy)=> {
+  moveVoyager(voy);
+})
+  moveLight();
 
   controls.update();
   renderer.render(
     scene,
     camera
-  );
+    );
 
   requestAnimationFrame(update);
 
@@ -243,15 +250,15 @@ moveLight();
 
 
 
-function moveVoyager(){
-  if(voyager2 != null){
-  //voyager.position.z = Math.tan(time);
-  voyager.rotation.x = (time);
-  voyager.position.z += Math.sin(time);
-  voyager.position.x += Math.cos(time);
+function moveVoyager(voy){
+  if(voy != null){
+    //voy.position.z = Math.tan(time);
+    voy.rotation.x = (time);
+    voy.position.z += Math.sin(time);
+    voy.position.x += Math.cos(time);
 
-  //voyager.position.y = Math.cos(time)*2;
-}
+    //voyager.position.y = Math.cos(time)*2;
+  }
 }
 
 // function moveVoyager(){
