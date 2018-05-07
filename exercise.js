@@ -110,7 +110,7 @@ function moveLight(){
 
 }
 function moveSpheres(){
-  sphere1.rotation.z = Math.tan(time);
+  //sphere1.rotation.z = Math.tan(time);
   sphere1.rotation.x = -Math.sin(time);
   sphere1.rotation.y = Math.cos(time)*2;
 
@@ -217,7 +217,7 @@ function update(){
   moveSpheres();
   var vol = mic.getLevel();
   // console.log(vol);
-  if (vol > 0.4){
+  if (vol > 0.3){
     // voyager.position.z = voyager.position.z + 20;
     let newVoyager = voyager.clone();
     voyagerArray.push(newVoyager);
@@ -255,7 +255,7 @@ function moveVoyager(voy){
     //voy.position.z = Math.tan(time);
     voy.rotation.x = (time);
     voy.position.z += Math.sin(time);
-    voy.position.x += Math.cos(time);
+    voy.position.x += Math.sin(time);
 
     //voyager.position.y = Math.cos(time)*2;
   }
