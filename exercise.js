@@ -217,7 +217,7 @@ function update(){
   moveSpheres();
   var vol = mic.getLevel();
   // console.log(vol);
-  if (vol > 0.3){
+  if (vol > 0.4){
     // voyager.position.z = voyager.position.z + 20;
     let newVoyager = voyager.clone();
     voyagerArray.push(newVoyager);
